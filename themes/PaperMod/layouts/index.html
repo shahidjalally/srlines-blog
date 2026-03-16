@@ -1,10 +1,24 @@
 {{ define "main" }}
-  {{ .Content }}
-  {{ range first 10 (where site.RegularPages "Section" "posts") }}
+  {{ if .Content }}<section>{{ .Content }}</section>{{ end }}
+
+  {{ $paginator := .Paginate (where site.RegularPages "Section" "posts") }}
+  {{ range $paginator.Pages }}
     <article>
       <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
       <p class="meta">{{ .Date.Format "Jan 2, 2006" }}</p>
       <p>{{ with .Description }}{{ . }}{{ else }}{{ .Summary }}{{ end }}</p>
     </article>
+  {{ end }}
+
+  {{ if gt $paginator.TotalPages 1 }}
+    <nav aria-label="Pagination">
+      {{ if $paginator.HasPrev }}
+        <a href="{{ $paginator.Prev.URL }}">← Newer posts</a>
+      {{ end }}
+      {{ if and $paginator.HasPrev $paginator.HasNext }} · {{ end }}
+      {{ if $paginator.HasNext }}
+        <a href="{{ $paginator.Next.URL }}">Older posts →</a>
+      {{ end }}
+    </nav>
   {{ end }}
 {{ end }}

@@ -1,0 +1,60 @@
+{{ define "main" }}
+  <section>
+    <h1>{{ .Title }}</h1>
+    {{ if .Params.summary }}<p>{{ .Params.summary }}</p>{{ end }}
+    <label for="search-input">Search posts</label>
+    <input id="search-input" type="search" placeholder="{{ with .Params.placeholder }}{{ . }}{{ else }}Search posts...{{ end }}" style="display:block;width:100%;max-width:640px;padding:.6rem;margin:.5rem 0 1rem;border:1px solid #d1d5db;border-radius:6px;" />
+    <p id="search-empty" class="meta">Type to filter blog posts by title or description.</p>
+    <div id="search-results"></div>
+  </section>
+
+  <script>
+    (function () {
+      const posts = [
+        {{- range where site.RegularPages "Section" "posts" -}}
+          {
+            title: {{ .Title | jsonify }},
+            description: {{ (or .Description .Summary) | plainify | jsonify }},
+            permalink: {{ .RelPermalink | jsonify }},
+            date: {{ .Date.Format "Jan 2, 2006" | jsonify }}
+          },
+        {{- end -}}
+      ];
+
+      const input = document.getElementById('search-input');
+      const results = document.getElementById('search-results');
+      const emptyState = document.getElementById('search-empty');
+
+      function render(items, query) {
+        if (!query) {
+          results.innerHTML = '';
+          emptyState.textContent = 'Type to filter blog posts by title or description.';
+          return;
+        }
+
+        if (!items.length) {
+          results.innerHTML = '';
+          emptyState.textContent = 'No matching posts found.';
+          return;
+        }
+
+        emptyState.textContent = `Showing ${items.length} matching post${items.length === 1 ? '' : 's'}.`;
+        results.innerHTML = items.map(item => `
+          <article>
+            <h2><a href="${item.permalink}">${item.title}</a></h2>
+            <p class="meta">${item.date}</p>
+            <p>${item.description}</p>
+          </article>
+        `).join('');
+      }
+
+      input.addEventListener('input', function (event) {
+        const query = event.target.value.trim().toLowerCase();
+        const filtered = posts.filter(post =>
+          post.title.toLowerCase().includes(query) || post.description.toLowerCase().includes(query)
+        );
+        render(filtered, query);
+      });
+    })();
+  </script>
+{{ end }}
