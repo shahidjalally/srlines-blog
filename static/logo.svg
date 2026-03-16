@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="SRLINES logo">
+  <defs>
+    <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#19A8EE"/>
+      <stop offset="100%" stop-color="#2F208A"/>
+    </linearGradient>
+    <clipPath id="sphereClip">
+      <circle cx="256" cy="256" r="210"/>
+    </clipPath>
+  </defs>
+
+  <circle cx="256" cy="256" r="210" fill="#f7f9ff" stroke="#1f2a44" stroke-width="8"/>
+
+  <g clip-path="url(#sphereClip)" fill="none" stroke-linecap="round" stroke-width="24">
+    <path d="M36 142 C150 90, 360 88, 472 146" stroke="#19A8EE"/>
+    <path d="M26 194 C142 146, 360 146, 482 200" stroke="#2F208A"/>
+    <path d="M20 248 C140 204, 370 204, 490 256" stroke="#19A8EE"/>
+    <path d="M30 304 C150 264, 364 264, 482 314" stroke="#2F208A"/>
+    <path d="M46 360 C162 324, 346 324, 462 370" stroke="#19A8EE"/>
+  </g>
+
+  <g fill="url(#g1)">
+    <path d="M383 125l56 18-41 43-4-21-49 1z"/>
+    <path d="M391 186l52 17-40 39-4-19-44 0z"/>
+    <path d="M399 245l51 16-38 37-4-17-42 0z"/>
+    <path d="M388 304l52 16-38 40-4-18-44 0z"/>
+    <path d="M372 360l52 16-38 40-4-18-42 0z"/>
+  </g>
+</svg>
