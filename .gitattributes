@@ -1,0 +1,6 @@
+# Keep fallback theme entry templates conflict-free across long-lived branches.
+# When these files differ between branches, prefer the version from the branch being merged.
+themes/PaperMod/layouts/_default/baseof.html merge=ours
+themes/PaperMod/layouts/_default/list.html merge=ours
+themes/PaperMod/layouts/index.html merge=ours
+themes/PaperMod/layouts/posts/list.html merge=ours
