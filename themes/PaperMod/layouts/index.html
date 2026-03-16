@@ -1,9 +1,5 @@
 {{ define "main" }}
   {{ .Content }}
   {{ $pages := where site.RegularPages "Section" "posts" }}
-  {{ $p := .Paginate $pages }}
-  {{ range $p.Pages }}
-    {{ partial "post-card.html" . }}
-  {{ end }}
-  {{ partial "pagination.html" . }}
+  {{ partial "paginated-posts.html" (dict "ctx" . "pages" $pages) }}
 {{ end }}

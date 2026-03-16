@@ -1,8 +1,4 @@
 {{ define "main" }}
   {{ if .Content }}<section>{{ .Content }}</section>{{ end }}
-  {{ $p := .Paginate .Pages }}
-  {{ range $p.Pages }}
-    {{ partial "post-card.html" . }}
-  {{ end }}
-  {{ partial "pagination.html" . }}
+  {{ partial "paginated-posts.html" (dict "ctx" . "pages" .Pages) }}
 {{ end }}
