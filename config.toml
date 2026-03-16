@@ -1,7 +1,7 @@
 baseURL = 'https://blog.srlines.net/'
 languageCode = 'en-us'
 title = 'SRLINES Blog'
-theme = ''
+theme = 'PaperMod'
 
 [pagination]
   pagerSize = 12
@@ -12,3 +12,11 @@ theme = ''
 [taxonomies]
   tag = 'tags'
   category = 'categories'
+
+[sitemap]
+  changefreq = 'weekly'
+  priority = 0.5
+  filename = 'sitemap.xml'
+
+[outputs]
+  home = ['HTML', 'RSS', 'SITEMAP']

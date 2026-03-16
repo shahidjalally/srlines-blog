@@ -1,0 +1,39 @@
+{{ define "main" }}
+  <h1>Search</h1>
+  <p>Type to filter all posts by title, summary, tags, or categories.</p>
+  <input id="searchBox" type="search" placeholder="Search posts..." style="padding:.55rem .7rem;border:1px solid #cbd5e1;border-radius:.5rem;width:100%;max-width:560px;" />
+  <ul id="searchResults" class="search-results" style="margin-top:1rem;padding-left:1rem;"></ul>
+  <script>
+    (function () {
+      const posts = [
+        {{- range where site.RegularPages "Section" "posts" -}}
+          {
+            title: {{ .Title | jsonify }},
+            link: {{ .RelPermalink | jsonify }},
+            summary: {{ (.Plain | truncate 180) | jsonify }},
+            tags: {{ delimit .Params.tags " " | jsonify }},
+            categories: {{ delimit .Params.categories " " | jsonify }}
+          },
+        {{- end -}}
+      ];
+
+      const params = new URLSearchParams(window.location.search);
+      const start = (params.get('q') || '').trim().toLowerCase();
+      const input = document.getElementById('searchBox');
+      const list = document.getElementById('searchResults');
+      input.value = start;
+
+      function render(term) {
+        const q = term.trim().toLowerCase();
+        const filtered = q
+          ? posts.filter(p => `${p.title} ${p.summary} ${p.tags} ${p.categories}`.toLowerCase().includes(q))
+          : posts;
+        list.innerHTML = filtered.slice(0, 50).map(p => `<li><a href="${p.link}">${p.title}</a><br><small>${p.summary}</small></li>`).join('');
+        if (!filtered.length) list.innerHTML = '<li>No matching posts found.</li>';
+      }
+
+      input.addEventListener('input', (e) => render(e.target.value));
+      render(start);
+    })();
+  </script>
+{{ end }}

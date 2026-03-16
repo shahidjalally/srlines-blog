@@ -1,0 +1,8 @@
+name = "PaperMod"
+license = "MIT"
+licenselink = "https://opensource.org/licenses/MIT"
+description = "Minimal local PaperMod-compatible fallback theme"
+homepage = "https://blog.srlines.net"
+tags = ["blog", "minimal"]
+features = ["blog"]
+min_version = "0.111.0"
