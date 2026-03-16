@@ -89,6 +89,44 @@
         justify-content: flex-end;
       }
 
+      .menu-toggle,
+      .menu-close {
+        display: none;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        background: var(--bg-elev);
+        color: var(--text);
+        cursor: pointer;
+        transition: border-color .16s ease, background .16s ease;
+      }
+
+      .menu-toggle {
+        width: 2.5rem;
+        height: 2.5rem;
+        padding: .4rem;
+      }
+
+      .menu-toggle:hover,
+      .menu-close:hover {
+        border-color: var(--brand);
+        background: var(--brand-soft);
+      }
+
+      .menu-toggle svg {
+        width: 100%;
+        height: 100%;
+      }
+
+      .menu-close-item {
+        display: none;
+      }
+
+      .menu-close {
+        margin-left: auto;
+        padding: .4rem .7rem;
+        font-size: .9rem;
+      }
+
       nav a {
         display: inline-block;
         padding: .45rem .8rem;
@@ -166,6 +204,55 @@
         color: var(--text-muted);
         padding: 1.2rem 0 2rem;
       }
+
+      @media (max-width: 760px) {
+        .site-header-inner {
+          min-height: 3.5rem;
+        }
+
+        nav {
+          position: fixed;
+          inset: 0;
+          background: color-mix(in srgb, var(--bg), transparent 8%);
+          padding: 1rem;
+          display: none;
+        }
+
+        nav ul {
+          flex-direction: column;
+          align-items: stretch;
+          background: var(--bg-elev);
+          border: 1px solid var(--border);
+          border-radius: var(--radius);
+          padding: .9rem;
+          gap: .35rem;
+        }
+
+        nav a {
+          width: 100%;
+          border-radius: .7rem;
+          padding: .65rem .75rem;
+        }
+
+        .menu-close-item {
+          display: flex;
+        }
+
+        .menu-toggle,
+        .menu-close {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        body.mobile-menu-open {
+          overflow: hidden;
+        }
+
+        body.mobile-menu-open nav {
+          display: block;
+        }
+      }
     </style>
   </head>
   <body>
@@ -178,8 +265,18 @@
           </a>
         </div>
         {{ if .Site.Menus.main }}
+          <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-navigation" aria-label="Open menu">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <line x1="4" y1="7" x2="20" y2="7"></line>
+              <line x1="4" y1="12" x2="20" y2="12"></line>
+              <line x1="4" y1="17" x2="20" y2="17"></line>
+            </svg>
+          </button>
           <nav aria-label="Main navigation">
-            <ul>
+            <ul id="main-navigation">
+              <li class="menu-close-item">
+                <button class="menu-close" type="button" aria-label="Close menu">Close ✕</button>
+              </li>
               {{ range .Site.Menus.main }}
                 {{- $isExternal := or (hasPrefix .URL "http://") (hasPrefix .URL "https://") -}}
                 {{- $openInNewTab := or $isExternal (and .Params .Params.newtab) -}}
@@ -200,5 +297,29 @@
         <small>© {{ now.Year }} {{ .Site.Title }} · Built with Hugo</small>
       </div>
     </footer>
+    <script>
+      (() => {
+        const menuToggle = document.querySelector('.menu-toggle');
+        const menuClose = document.querySelector('.menu-close');
+        const menuLinks = document.querySelectorAll('nav a');
+
+        if (!menuToggle || !menuClose) return;
+
+        const setMenuOpen = (isOpen) => {
+          document.body.classList.toggle('mobile-menu-open', isOpen);
+          menuToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        };
+
+        menuToggle.addEventListener('click', () => setMenuOpen(true));
+        menuClose.addEventListener('click', () => setMenuOpen(false));
+        menuLinks.forEach((link) => {
+          link.addEventListener('click', () => setMenuOpen(false));
+        });
+
+        window.addEventListener('resize', () => {
+          if (window.innerWidth > 760) setMenuOpen(false);
+        });
+      })();
+    </script>
   </body>
 </html>
