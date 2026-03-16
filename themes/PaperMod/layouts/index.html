@@ -3,11 +3,7 @@
   {{ $pages := where site.RegularPages "Section" "posts" }}
   {{ $p := .Paginate $pages }}
   {{ range $p.Pages }}
-    <article>
-      <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
-      <p class="meta">{{ .Date.Format "Jan 2, 2006" }}</p>
-      <p>{{ with .Description }}{{ . }}{{ else }}{{ .Summary }}{{ end }}</p>
-    </article>
+    {{ partial "post-card.html" . }}
   {{ end }}
   {{ partial "pagination.html" . }}
 {{ end }}
