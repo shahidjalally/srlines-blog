@@ -1,103 +1,39 @@
-name: Fix Hugo Theme
+name: Verify Hugo Theme Setup
 
 on:
-  # Allow manual trigger
   workflow_dispatch:
-  # Optional: Run on push to main branch
   push:
     branches: [ main ]
     paths:
       - 'config.toml'
+      - 'themes/**'
+      - '.github/workflows/fix-hugo-theme.yml'
+  pull_request:
+    paths:
+      - 'config.toml'
+      - 'themes/**'
       - '.github/workflows/fix-hugo-theme.yml'
 
 jobs:
-  fix-theme:
+  verify-theme:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          submodules: false  # We'll handle submodules manually
-          fetch-depth: 0
+          submodules: recursive
 
-      - name: Check if PaperMod theme exists
-        id: check-theme
-        run: |
-          if [ -d "themes/PaperMod" ] && [ -f "themes/PaperMod/theme.toml" ]; then
-            echo "Theme already exists"
-            echo "exists=true" >> $GITHUB_OUTPUT
-          else
-            echo "Theme missing or incomplete"
-            echo "exists=false" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Install/Update PaperMod theme
-        if: steps.check-theme.outputs.exists == 'false'
-        run: |
-          # Remove existing theme directory if it exists but is incomplete
-          rm -rf themes/PaperMod
-          
-          # Initialize submodules if not already done
-          if [ ! -f ".gitmodules" ]; then
-            git submodule add https://github.com/adityatelange/hugo-PaperMod.git themes/PaperMod
-          else
-            # Check if submodule already configured
-            if ! git config -f .gitmodules --get-regexp '^submodule\.themes/PaperMod\.' > /dev/null; then
-              git submodule add https://github.com/adityatelange/hugo-PaperMod.git themes/PaperMod
-            else
-              git submodule update --init --recursive
-            fi
-          fi
-
-      - name: Fix config.toml
-        run: |
-          # Backup original config
-          cp config.toml config.toml.backup 2>/dev/null || true
-          
-          # Check if theme is set correctly
-          if ! grep -q '^theme = "PaperMod"' config.toml; then
-            echo "Fixing theme in config.toml"
-            
-            # Remove any existing theme line and add correct one
-            sed -i '/^theme = /d' config.toml
-            echo 'theme = "PaperMod"' >> config.toml
-            
-            # Ensure baseURL is set
-            if ! grep -q '^baseURL = ' config.toml; then
-              echo 'baseURL = "https://blog.srlines.net/"' >> config.toml
-            fi
-            
-            # Ensure languageCode is set
-            if ! grep -q '^languageCode = ' config.toml; then
-              echo 'languageCode = "en-us"' >> config.toml
-            fi
-            
-            # Ensure title is set
-            if ! grep -q '^title = ' config.toml; then
-              echo 'title = "SRLINES Blog"' >> config.toml
-            fi
-          else
-            echo "Theme already correctly set in config.toml"
-          fi
-
-      - name: Create Pull Request with fixes
-        uses: peter-evans/create-pull-request@v6
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v3
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: "fix: Install and configure PaperMod theme"
-          title: "Fix Hugo theme configuration"
-          body: |
-            This PR automatically fixes the Hugo theme configuration:
-            
-            - Installs PaperMod theme as a git submodule
-            - Updates config.toml with correct theme setting
-            - Ensures baseURL, languageCode, and title are properly set
-            
-            This should resolve any theme-related issues with your Hugo blog.
-          branch: fix-hugo-theme
-          base: main
-          delete-branch: true
+          hugo-version: '0.128.0'
+          extended: true
+
+      - name: Validate PaperMod theme presence
+        run: |
+          test -f themes/PaperMod/theme.toml
+          grep -E '^theme = ["\'"'"']PaperMod["\'"'"']$' config.toml
+
+      - name: Build site
+        run: hugo --gc --minify
