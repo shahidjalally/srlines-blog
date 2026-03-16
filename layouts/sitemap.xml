@@ -1,6 +1,6 @@
 {{- printf "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\"?>" | safeHTML }}
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  {{- range .Site.AllPages }}
+  {{- range .Site.RegularPages }}
   {{- if not .Params.sitemap_exclude }}
   <url>
     <loc>{{ .Permalink }}</loc>
