@@ -1,9 +1,9 @@
 {{ define "main" }}
-  <section>
+  <section class="hero">
     <h1>{{ .Title }}</h1>
-    {{ if .Params.summary }}<p>{{ .Params.summary }}</p>{{ end }}
-    <label for="search-input">Search posts</label>
-    <input id="search-input" type="search" placeholder="{{ with .Params.placeholder }}{{ . }}{{ else }}Search posts...{{ end }}" style="display:block;width:100%;max-width:640px;padding:.6rem;margin:.5rem 0 1rem;border:1px solid #d1d5db;border-radius:6px;" />
+    {{ if .Params.summary }}<p class="meta">{{ .Params.summary }}</p>{{ end }}
+    <label for="search-input" class="meta">Search posts</label>
+    <input id="search-input" type="search" placeholder="{{ with .Params.placeholder }}{{ . }}{{ else }}Search posts...{{ end }}" autocomplete="off" />
     <p id="search-empty" class="meta">Type to filter blog posts by title or description.</p>
     <div id="search-results"></div>
   </section>
@@ -15,7 +15,7 @@
           {
             title: {{ .Title | jsonify }},
             description: {{ (or .Description .Summary) | plainify | jsonify }},
-            permalink: {{ .RelPermalink | jsonify }},
+            permalink: {{ .Permalink | jsonify }},
             date: {{ .Date.Format "Jan 2, 2006" | jsonify }}
           },
         {{- end -}}
@@ -39,13 +39,16 @@
         }
 
         emptyState.textContent = `Showing ${items.length} matching post${items.length === 1 ? '' : 's'}.`;
-        results.innerHTML = items.map(item => `
-          <article>
-            <h2><a href="${item.permalink}">${item.title}</a></h2>
-            <p class="meta">${item.date}</p>
-            <p>${item.description}</p>
-          </article>
-        `).join('');
+        results.innerHTML = items.map(item => {
+          const safeUrl = new URL(item.permalink, window.location.origin).toString();
+          return `
+            <article class="card">
+              <h2><a href="${safeUrl}">${item.title}</a></h2>
+              <p class="meta">${item.date}</p>
+              <p class="excerpt">${item.description}</p>
+            </article>
+          `;
+        }).join('');
       }
 
       input.addEventListener('input', function (event) {

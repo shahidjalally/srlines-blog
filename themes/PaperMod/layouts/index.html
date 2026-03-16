@@ -1,23 +1,26 @@
 {{ define "main" }}
-  {{ if .Content }}<section>{{ .Content }}</section>{{ end }}
+  <section class="hero">
+    <h1>{{ .Site.Title }}</h1>
+    {{ if .Site.Params.description }}<p class="meta">{{ .Site.Params.description }}</p>{{ end }}
+    {{ if .Content }}<div class="content">{{ .Content }}</div>{{ end }}
+  </section>
 
   {{ $paginator := .Paginate (where site.RegularPages "Section" "posts") }}
   {{ range $paginator.Pages }}
-    <article>
+    <article class="card">
       <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
       <p class="meta">{{ .Date.Format "Jan 2, 2006" }}</p>
-      <p>{{ with .Description }}{{ . }}{{ else }}{{ .Summary }}{{ end }}</p>
+      <p class="excerpt">{{ with .Description }}{{ . }}{{ else }}{{ .Summary }}{{ end }}</p>
     </article>
   {{ end }}
 
   {{ if gt $paginator.TotalPages 1 }}
-    <nav aria-label="Pagination">
+    <nav class="pagination" aria-label="Pagination">
       {{ if $paginator.HasPrev }}
-        <a href="{{ $paginator.Prev.URL }}">← Newer posts</a>
+        <a class="btn" href="{{ $paginator.Prev.URL }}">← Newer posts</a>
       {{ end }}
-      {{ if and $paginator.HasPrev $paginator.HasNext }} · {{ end }}
       {{ if $paginator.HasNext }}
-        <a href="{{ $paginator.Next.URL }}">Older posts →</a>
+        <a class="btn" href="{{ $paginator.Next.URL }}">Older posts →</a>
       {{ end }}
     </nav>
   {{ end }}

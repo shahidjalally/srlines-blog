@@ -1,10 +1,14 @@
 {{ define "main" }}
-  {{ if .Content }}<section>{{ .Content }}</section>{{ end }}
+  <section class="hero">
+    <h1>{{ .Title }}</h1>
+    {{ if .Content }}<div class="content">{{ .Content }}</div>{{ end }}
+  </section>
+
   {{ range .Paginator.Pages }}
-    <article>
+    <article class="card">
       <h2><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
       <p class="meta">{{ .Date.Format "Jan 2, 2006" }}</p>
-      <p>{{ with .Description }}{{ . }}{{ else }}{{ .Summary }}{{ end }}</p>
+      <p class="excerpt">{{ with .Description }}{{ . }}{{ else }}{{ .Summary }}{{ end }}</p>
     </article>
   {{ end }}
 {{ end }}

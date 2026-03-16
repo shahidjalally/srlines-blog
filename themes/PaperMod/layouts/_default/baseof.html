@@ -6,25 +6,178 @@
     <title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} · {{ .Site.Title }}{{ end }}</title>
     <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ .Site.Params.description }}{{ end }}" />
     <style>
-      body { font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; max-width: 860px; margin: 0 auto; padding: 2rem 1rem; line-height: 1.65; color: #1f2937; }
-      a { color: #2563eb; text-decoration: none; }
-      a:hover { text-decoration: underline; }
-      header, footer { margin-bottom: 2rem; }
-      nav a { margin-right: 1rem; }
-      article { margin-bottom: 2rem; padding-bottom: 1rem; border-bottom: 1px solid #e5e7eb; }
-      .meta { color: #6b7280; font-size: 0.9rem; }
+      :root {
+        --bg: #0b1220;
+        --bg-elev: #111a2b;
+        --text: #e6edf7;
+        --text-muted: #93a4bf;
+        --card: #131f35;
+        --border: #24324b;
+        --brand: #3b82f6;
+        --brand-soft: rgba(59, 130, 246, 0.15);
+        --success: #22c55e;
+        --max-width: 1040px;
+        --radius: 14px;
+      }
+
+      @media (prefers-color-scheme: light) {
+        :root {
+          --bg: #f3f7ff;
+          --bg-elev: #ffffff;
+          --text: #0f172a;
+          --text-muted: #475569;
+          --card: #ffffff;
+          --border: #dbe5f5;
+          --brand: #2563eb;
+          --brand-soft: rgba(37, 99, 235, 0.09);
+        }
+      }
+
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; }
+      body {
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+        line-height: 1.7;
+        background: radial-gradient(circle at top, #1d2a45 0%, var(--bg) 40%) fixed;
+        color: var(--text);
+      }
+
+      .container {
+        width: min(100% - 2rem, var(--max-width));
+        margin-inline: auto;
+      }
+
+      header.site-header {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        backdrop-filter: blur(8px);
+        background: color-mix(in srgb, var(--bg), transparent 20%);
+        border-bottom: 1px solid var(--border);
+      }
+
+      .site-header-inner {
+        min-height: 4rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+      }
+
+      .brand { font-weight: 700; letter-spacing: .2px; font-size: 1.05rem; }
+      .brand a, a { color: var(--text); text-decoration: none; }
+
+      nav ul {
+        list-style: none;
+        display: flex;
+        gap: .5rem;
+        margin: 0;
+        padding: 0;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+      }
+
+      nav a {
+        display: inline-block;
+        padding: .45rem .8rem;
+        border: 1px solid transparent;
+        border-radius: 999px;
+        color: var(--text-muted);
+        transition: all .16s ease;
+      }
+
+      nav a:hover,
+      nav a.active {
+        color: var(--text);
+        border-color: var(--border);
+        background: var(--brand-soft);
+      }
+
+      main { padding: 2rem 0 3rem; }
+
+      .hero {
+        background: color-mix(in srgb, var(--card), transparent 18%);
+        border: 1px solid var(--border);
+        border-radius: calc(var(--radius) + 4px);
+        padding: 1.4rem;
+        margin-bottom: 1.2rem;
+      }
+
+      .card {
+        background: color-mix(in srgb, var(--card), transparent 8%);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 1.25rem;
+        margin-bottom: 1rem;
+      }
+
+      h1, h2, h3 { line-height: 1.25; margin-top: 0; }
+      h1 { font-size: clamp(1.75rem, 3vw, 2.4rem); margin-bottom: .5rem; }
+      h2 { font-size: clamp(1.2rem, 2.2vw, 1.5rem); margin-bottom: .35rem; }
+
+      .meta { color: var(--text-muted); font-size: .95rem; margin: .15rem 0 .7rem; }
+      .excerpt { margin: 0; color: color-mix(in srgb, var(--text), #b8c4da 12%); }
+
+      article.card:hover {
+        border-color: color-mix(in srgb, var(--brand), var(--border) 65%);
+      }
+
+      .pagination { display: flex; gap: .65rem; margin-top: 1.25rem; }
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: .4rem;
+        padding: .5rem .85rem;
+        border-radius: 10px;
+        border: 1px solid var(--border);
+        color: var(--text);
+        background: var(--bg-elev);
+      }
+
+      .btn:hover { border-color: var(--brand); background: var(--brand-soft); }
+
+      .content a,
+      article a { color: #8bb7ff; }
+
+      input[type="search"] {
+        width: min(100%, 720px);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        background: var(--bg-elev);
+        color: var(--text);
+        padding: .75rem .9rem;
+        font-size: 1rem;
+      }
+
+      footer {
+        border-top: 1px solid var(--border);
+        color: var(--text-muted);
+        padding: 1.2rem 0 2rem;
+      }
     </style>
   </head>
   <body>
-    <header>
-      <h1><a href="{{ "/" | relURL }}">{{ .Site.Title }}</a></h1>
-      <p>{{ .Site.Params.description }}</p>
+    <header class="site-header">
+      <div class="container site-header-inner">
+        <div class="brand"><a href="{{ "/" | relURL }}">{{ .Site.Title }}</a></div>
+        {{ if .Site.Menus.main }}
+          <nav aria-label="Main navigation">
+            <ul>
+              {{ range .Site.Menus.main }}
+                <li><a href="{{ .URL | relURL }}"{{ if or ($.IsMenuCurrent "main" .) ($.HasMenuCurrent "main" .) }} class="active"{{ end }}>{{ .Name }}</a></li>
+              {{ end }}
+            </ul>
+          </nav>
+        {{ end }}
+      </div>
     </header>
-    <main>
+    <main class="container">
       {{ block "main" . }}{{ end }}
     </main>
     <footer>
-      <small>© {{ now.Year }} {{ .Site.Title }}</small>
+      <div class="container">
+        <small>© {{ now.Year }} {{ .Site.Title }} · Built with Hugo</small>
+      </div>
     </footer>
   </body>
 </html>
