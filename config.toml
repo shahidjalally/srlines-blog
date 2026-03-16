@@ -6,8 +6,50 @@ theme = 'PaperMod'
 [pagination]
   pagerSize = 12
 
+[outputs]
+  home = ['HTML', 'RSS', 'JSON']
+
+[sitemap]
+  changefreq = 'weekly'
+  filename = 'sitemap.xml'
+  priority = 0.5
+
 [params]
   description = 'Actionable WhatsApp automation, API, and growth guides from SRLINES.'
+  ShowBreadCrumbs = true
+  ShowCodeCopyButtons = true
+  ShowPostNavLinks = true
+  ShowShareButtons = true
+
+[[menu.main]]
+  identifier = 'home'
+  name = 'Home'
+  url = '/'
+  weight = 10
+
+[[menu.main]]
+  identifier = 'search'
+  name = 'Search'
+  url = '/search/'
+  weight = 20
+
+[[menu.main]]
+  identifier = 'archives'
+  name = 'Archives'
+  url = '/archives/'
+  weight = 30
+
+[[menu.main]]
+  identifier = 'categories'
+  name = 'Categories'
+  url = '/categories/'
+  weight = 40
+
+[[menu.main]]
+  identifier = 'tags'
+  name = 'Tags'
+  url = '/tags/'
+  weight = 50
 
 [taxonomies]
   tag = 'tags'
