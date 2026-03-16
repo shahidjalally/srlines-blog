@@ -1,7 +1,7 @@
 baseURL = 'https://blog.srlines.net/'
 languageCode = 'en-us'
 title = 'SRLINES Blog'
-theme = ''
+theme = 'PaperMod'
 
 [pagination]
   pagerSize = 12
