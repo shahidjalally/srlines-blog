@@ -1,0 +1,14 @@
+baseURL = 'https://blog.srlines.net/'
+languageCode = 'en-us'
+title = 'SRLINES Blog'
+theme = ''
+
+[pagination]
+  pagerSize = 12
+
+[params]
+  description = 'Actionable WhatsApp automation, API, and growth guides from SRLINES.'
+
+[taxonomies]
+  tag = 'tags'
+  category = 'categories'
