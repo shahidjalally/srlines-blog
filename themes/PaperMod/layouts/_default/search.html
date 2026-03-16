@@ -15,7 +15,7 @@
           {
             title: {{ .Title | jsonify }},
             description: {{ (or .Description .Summary) | plainify | jsonify }},
-            permalink: {{ .Permalink | jsonify }},
+            permalink: {{ .RelPermalink | jsonify }},
             date: {{ .Date.Format "Jan 2, 2006" | jsonify }}
           },
         {{- end -}}
@@ -40,7 +40,7 @@
 
         emptyState.textContent = `Showing ${items.length} matching post${items.length === 1 ? '' : 's'}.`;
         results.innerHTML = items.map(item => {
-          const safeUrl = new URL(item.permalink, window.location.origin).toString();
+          const safeUrl = String(item.permalink || '').replace(/^"+|"+$/g, '');
           return `
             <article class="card">
               <h2><a href="${safeUrl}">${item.title}</a></h2>
