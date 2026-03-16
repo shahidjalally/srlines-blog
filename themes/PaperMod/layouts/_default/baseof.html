@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} · {{ .Site.Title }}{{ end }}</title>
     <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ .Site.Params.description }}{{ end }}" />
+    <link rel="icon" type="image/svg+xml" href="{{ "favicon.svg" | relURL }}" />
     <style>
       :root {
         --bg: #0b1220;
@@ -66,6 +67,17 @@
 
       .brand { font-weight: 700; letter-spacing: .2px; font-size: 1.05rem; }
       .brand a, a { color: var(--text); text-decoration: none; }
+      .brand a {
+        display: inline-flex;
+        align-items: center;
+        gap: .55rem;
+      }
+
+      .brand img {
+        width: 1.9rem;
+        height: 1.9rem;
+        border-radius: 50%;
+      }
 
       nav ul {
         list-style: none;
@@ -159,12 +171,21 @@
   <body>
     <header class="site-header">
       <div class="container site-header-inner">
-        <div class="brand"><a href="{{ "/" | relURL }}">{{ .Site.Title }}</a></div>
+        <div class="brand">
+          <a href="{{ "/" | relURL }}">
+            <img src="{{ "logo.svg" | relURL }}" alt="{{ .Site.Title }} logo" />
+            <span>{{ .Site.Title }}</span>
+          </a>
+        </div>
         {{ if .Site.Menus.main }}
           <nav aria-label="Main navigation">
             <ul>
               {{ range .Site.Menus.main }}
-                <li><a href="{{ .URL | relURL }}"{{ if or ($.IsMenuCurrent "main" .) ($.HasMenuCurrent "main" .) }} class="active"{{ end }}>{{ .Name }}</a></li>
+                {{- $isExternal := or (hasPrefix .URL "http://") (hasPrefix .URL "https://") -}}
+                {{- $openInNewTab := or $isExternal (and .Params .Params.newtab) -}}
+                <li>
+                  <a href="{{ if $isExternal }}{{ .URL }}{{ else }}{{ .URL | relURL }}{{ end }}"{{ if or ($.IsMenuCurrent "main" .) ($.HasMenuCurrent "main" .) }} class="active"{{ end }}{{ if $openInNewTab }} target="_blank" rel="noopener noreferrer"{{ end }}>{{ .Name }}</a>
+                </li>
               {{ end }}
             </ul>
           </nav>

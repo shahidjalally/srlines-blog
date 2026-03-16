@@ -51,6 +51,14 @@ theme = 'PaperMod'
   url = '/tags/'
   weight = 50
 
+[[menu.main]]
+  identifier = 'main-website'
+  name = 'Main Website'
+  url = 'https://srlines.net/'
+  weight = 60
+  [menu.main.params]
+    newtab = true
+
 [taxonomies]
   tag = 'tags'
   category = 'categories'
