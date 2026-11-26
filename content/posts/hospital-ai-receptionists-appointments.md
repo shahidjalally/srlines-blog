@@ -5,7 +5,8 @@ slug: hospital-ai-receptionists-appointments
 author: SRLINES
 categories: ["AI Calling", "Pakistan"]
 tags: ["ai calling", "ai-enabled pbx"]
-draft: true
+date: 2026-11-26
+draft: false
 ---
 
 ## Keep the information administrative

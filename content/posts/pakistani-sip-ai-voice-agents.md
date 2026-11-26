@@ -5,7 +5,8 @@ slug: pakistani-sip-ai-voice-agents
 author: SRLINES
 categories: ["AI Calling", "Pakistan"]
 tags: ["ai calling", "ai-enabled pbx"]
-draft: true
+date: 2026-11-26
+draft: false
 ---
 
 ## Confirm service with the carrier

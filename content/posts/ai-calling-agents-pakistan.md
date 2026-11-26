@@ -5,7 +5,8 @@ slug: ai-calling-agents-pakistan
 author: SRLINES
 categories: ["AI Calling", "Pakistan"]
 tags: ["ai calling", "ai-enabled pbx"]
-draft: true
+date: 2026-11-26
+draft: false
 ---
 
 ## Start with a call your team already understands

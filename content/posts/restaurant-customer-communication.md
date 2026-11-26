@@ -5,7 +5,8 @@ slug: restaurant-customer-communication
 author: SRLINES
 categories: ["AI Calling", "Pakistan"]
 tags: ["ai calling", "ai-enabled pbx"]
-draft: true
+date: 2026-11-26
+draft: false
 ---
 
 ## Answer branch-specific questions first

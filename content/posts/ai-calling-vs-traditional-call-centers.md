@@ -5,7 +5,8 @@ slug: ai-calling-vs-traditional-call-centers
 author: SRLINES
 categories: ["AI Calling", "Pakistan"]
 tags: ["ai calling", "ai-enabled pbx"]
-draft: true
+date: 2026-11-26
+draft: false
 ---
 
 ## Use repetition and risk to allocate work
